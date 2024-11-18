@@ -2,14 +2,12 @@
 #include "file_operations.h"
 #include "file_utils.h"
 
-// Create a new file with optional tags
 int create_file(const char* filename, const char* tags[], int tag_count) {
     if (!fs) {
         printf("Filesystem not initialized\n");
         return -1;
     }
 
-    // Check if filename already exists
     for (int i = 0; i < MAX_FILES; i++) {
         if (fs->file_table[i].is_used && 
             strcmp(fs->file_table[i].filename, filename) == 0) {
@@ -18,15 +16,12 @@ int create_file(const char* filename, const char* tags[], int tag_count) {
         }
     }
 
-    // Find free file entry
     for (int i = 0; i < MAX_FILES; i++) {
         if (!fs->file_table[i].is_used) {
             strncpy(fs->file_table[i].filename, filename, MAX_FILENAME_LENGTH - 1);
             
-            // Extract and set extension
             extract_extension(filename, fs->file_table[i].extension);
             
-            // Determine and set file type
             fs->file_table[i].file_type = determine_file_type(fs->file_table[i].extension);
             strncpy(
                 fs->file_table[i].file_type_str, 
@@ -34,7 +29,6 @@ int create_file(const char* filename, const char* tags[], int tag_count) {
                 MAX_FILE_TYPE_LENGTH
             );
 
-            // Add tags
             fs->file_table[i].tag_count = (tag_count > MAX_TAGS) ? MAX_TAGS : tag_count;
             for (int j = 0; j < fs->file_table[i].tag_count; j++) {
                 strncpy(fs->file_table[i].tags[j], tags[j], MAX_TAG_LENGTH - 1);
@@ -58,7 +52,6 @@ int create_file(const char* filename, const char* tags[], int tag_count) {
     return -1;
 }
 
-// Remove a file
 int remove_file(const char* filename) {
     if (!fs) {
         printf("Filesystem not initialized\n");
@@ -68,7 +61,6 @@ int remove_file(const char* filename) {
     for (int i = 0; i < MAX_FILES; i++) {
         if (fs->file_table[i].is_used && 
             strcmp(fs->file_table[i].filename, filename) == 0) {
-            // Mark file as unused
             fs->file_table[i].is_used = 0;
             memset(fs->data + (fs->file_table[i].start_block * BLOCK_SIZE), 0, BLOCK_SIZE);
             printf("Removed file: %s\n", filename);
@@ -80,11 +72,9 @@ int remove_file(const char* filename) {
     return -1;
 }
 
-// Write content to a file
 int write_file(const char* filename, const char* content) {
     int file_index = -1;
 
-    // Find the file
     for (int i = 0; i < MAX_FILES; i++) {
         if (fs->file_table[i].is_used && 
             strcmp(fs->file_table[i].filename, filename) == 0) {
@@ -104,11 +94,9 @@ int write_file(const char* filename, const char* content) {
         return -1;
     }
 
-    // Write content to file's block
     int start_block = fs->file_table[file_index].start_block;
     memcpy(fs->data + (start_block * BLOCK_SIZE), content, content_length);
     
-    // Update file metadata
     fs->file_table[file_index].file_size = content_length;
     fs->file_table[file_index].modification_time = time(NULL);
 
@@ -116,7 +104,6 @@ int write_file(const char* filename, const char* content) {
     return 0;
 }
 
-// Read file content
 char* read_file(const char* filename) {
     for (int i = 0; i < MAX_FILES; i++) {
         if (fs->file_table[i].is_used && 
@@ -130,8 +117,7 @@ char* read_file(const char* filename) {
 
             int start_block = fs->file_table[i].start_block;
             memcpy(content, fs->data + (start_block * BLOCK_SIZE), BLOCK_SIZE);
-            content[BLOCK_SIZE] = '\0';  // Null terminate
-
+            content[BLOCK_SIZE] = '\0'; 
             return content;
         }
     }
@@ -140,7 +126,6 @@ char* read_file(const char* filename) {
     return NULL;
 }
 
-// Get file size
 int get_file_size(const char* filename) {
     for (int i = 0; i < MAX_FILES; i++) {
         if (fs->file_table[i].is_used && 
@@ -153,7 +138,6 @@ int get_file_size(const char* filename) {
     return -1;
 }
 
-// List all files
 void list_files() {
     printf("Files in filesystem:\n");
     for (int i = 0; i < MAX_FILES; i++) {

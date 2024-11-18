@@ -7,7 +7,6 @@
 #include "search_filter.h"
 #include "file_utils.h"
 
-// Interactive shell
 void filesystem_shell() {
     char command[256];
     char arg1[256];
@@ -16,13 +15,10 @@ void filesystem_shell() {
     while (1) {
         printf("filesystem> ");
         fgets(command, sizeof(command), stdin);
-        command[strcspn(command, "\n")] = 0;  // Remove newline
+        command[strcspn(command, "\n")] = 0;  
 
-        // Parse command
         if (sscanf(command, "%s %s %[^\n]", arg1, arg2, arg2) == 2) {
-            // Two-argument commands
             if (strcmp(arg1, "touch") == 0) {
-                // Example of creating a file with tags
                 const char* tags[] = {"draft", "work"};
                 create_file(arg2, tags, 2);
             } else if (strcmp(arg1, "rm") == 0) {
@@ -53,7 +49,6 @@ void filesystem_shell() {
             }
         } else if (sscanf(command, "%s %s", arg1, arg2) == 2) {
             if (strcmp(arg1, "filter-type") == 0) {
-                // Parse file type
                 FileType type = FILE_TYPE_UNKNOWN;
                 if (strcmp(arg2, "text") == 0) type = FILE_TYPE_TEXT;
                 else if (strcmp(arg2, "binary") == 0) type = FILE_TYPE_BINARY;
@@ -66,7 +61,6 @@ void filesystem_shell() {
                 filter_files_by_type(type);
             }
         } else if (sscanf(command, "%s", arg1) == 1) {
-            // Single-argument commands
             if (strcmp(arg1, "ls") == 0) {
                 list_files();
             } else if (strcmp(arg1, "format") == 0) {
@@ -79,7 +73,6 @@ void filesystem_shell() {
 }
 
 int main() {
-    // Initialize filesystem
     create_filesystem();
 
     printf("Enhanced Filesystem Shell\n");
@@ -97,10 +90,8 @@ int main() {
     printf("  format             - Reset filesystem\n");
     printf("  exit               - Exit shell\n");
 
-    // Start interactive shell
     filesystem_shell();
 
-    // Cleanup
     destroy_filesystem(fs);
     return 0;
 }

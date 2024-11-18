@@ -14,7 +14,6 @@
 #define MAX_TAG_LENGTH 32
 #define MAX_FILE_TYPE_LENGTH 32
 
-// File type enums
 typedef enum {
     FILE_TYPE_UNKNOWN,
     FILE_TYPE_TEXT,
@@ -26,7 +25,6 @@ typedef enum {
     FILE_TYPE_VIDEO
 } FileType;
 
-// File entry structure
 typedef struct {
     char filename[MAX_FILENAME_LENGTH];
     char extension[16];
@@ -41,7 +39,6 @@ typedef struct {
     int is_used;
 } FileEntry;
 
-// Filesystem structure
 typedef struct {
     char data[FILESYSTEM_SIZE];
     FileEntry file_table[MAX_FILES];
@@ -49,12 +46,10 @@ typedef struct {
     int total_blocks;
 } FileSystem;
 
-// Global filesystem instance
 extern FileSystem* fs;
 
-// Filesystem management functions
 FileSystem* create_filesystem();
 void destroy_filesystem(FileSystem* fs);
 void format_filesystem();
 
-#endif // FILESYSTEM_H
+#endif 
