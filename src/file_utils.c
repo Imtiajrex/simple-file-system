@@ -1,13 +1,11 @@
 #include <ctype.h>
 #include "file_utils.h"
 
-// Extract file extension and convert to lowercase
 void extract_extension(const char* filename, char* extension) {
     char* dot = strrchr(filename, '.');
     if (dot && dot != filename) {
         strncpy(extension, dot + 1, 15);
         extension[15] = '\0';
-        // Convert to lowercase
         for (int i = 0; extension[i]; i++) {
             extension[i] = tolower(extension[i]);
         }
@@ -16,7 +14,6 @@ void extract_extension(const char* filename, char* extension) {
     }
 }
 
-// Determine file type based on extension
 FileType determine_file_type(const char* extension) {
     if (!extension || strlen(extension) == 0) return FILE_TYPE_UNKNOWN;
 
@@ -48,7 +45,6 @@ FileType determine_file_type(const char* extension) {
     return FILE_TYPE_BINARY;
 }
 
-// Get file type string representation
 const char* get_file_type_string(FileType type) {
     switch (type) {
         case FILE_TYPE_TEXT: return "Text";

@@ -2,7 +2,6 @@
 #include "search_filter.h"
 #include "file_utils.h"
 
-// Search files by name (with partial matching)
 void search_files_by_name(const char* search_term) {
     printf("Search results for '%s':\n", search_term);
     int found = 0;
@@ -21,7 +20,6 @@ void search_files_by_name(const char* search_term) {
     }
 }
 
-// Filter files by extension
 void filter_files_by_extension(const char* extension) {
     printf("Files with extension '%s':\n", extension);
     int found = 0;
@@ -39,7 +37,6 @@ void filter_files_by_extension(const char* extension) {
     }
 }
 
-// Filter files by type
 void filter_files_by_type(FileType type) {
     const char* type_name = get_file_type_string(type);
     printf("Files of type '%s':\n", type_name);
@@ -59,7 +56,6 @@ void filter_files_by_type(FileType type) {
     }
 }
 
-// Filter files by tag
 void filter_files_by_tag(const char* tag) {
     printf("Files tagged with '%s':\n", tag);
     int found = 0;
